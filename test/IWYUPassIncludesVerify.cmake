@@ -7,7 +7,7 @@
 include (${IWYU_CMAKE_TESTS_DIRECTORY}/CMakeUnit.cmake)
 set (BUILD_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/BUILD.output)
 
-set (HEADERS_REGEX ".*-I.*internal.*-isystem.*external.*")
+set (HEADERS_REGEX ".*-isystem.*external.*-I.*internal.*")
 
 set (SOURCE_COMMAND
 	 "^.*include-what-you-use${HEADERS_REGEX}Source.cpp.*$")
