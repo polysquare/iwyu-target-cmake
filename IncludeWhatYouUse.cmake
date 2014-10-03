@@ -73,7 +73,7 @@ function (iwyu_target_sources TARGET)
                          SINGLEVAR_ARGS FORCE_LANGUAGE
                          MULTIVAR_ARGS CPP_IDENTIFIERS)
 
-    psq_sort_sources_to_languages (C_SOURCES CXX_SOURCES
+    psq_sort_sources_to_languages (C_SOURCES CXX_SOURCES HEADERS
                                    INCLUDES ${ALL_INCLUDE_DIRS}
                                    SOURCES ${FILES_TO_CHECK}
                                    ${DETERMINE_LANG_FORWARD_OPTIONS})
