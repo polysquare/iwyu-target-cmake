@@ -55,10 +55,6 @@ function (iwyu_target_sources TARGET)
 
     psq_get_target_command_attach_point (${TARGET} WHEN)
 
-    set (ALL_INCLUDE_DIRS
-         ${IWYU_SOURCES_EXTERNAL_INCLUDE_DIRS}
-         ${IWYU_SOURCES_INTERNAL_INCLUDE_DIRS})
-
     psq_append_each_to_options_with_prefix (IWYU_TARGET_ARGS
                                             -isystem
                                             LIST ${IWYU_SOURCES_EXTERNAL_INCLUDE_DIRS})
@@ -74,7 +70,8 @@ function (iwyu_target_sources TARGET)
                          MULTIVAR_ARGS CPP_IDENTIFIERS)
 
     psq_sort_sources_to_languages (C_SOURCES CXX_SOURCES HEADERS
-                                   INCLUDES ${ALL_INCLUDE_DIRS}
+                                   INCLUDES
+                                   ${IWYU_SOURCES_INTERNAL_INCLUDE_DIRS}
                                    SOURCES ${FILES_TO_CHECK}
                                    ${DETERMINE_LANG_FORWARD_OPTIONS})
 
