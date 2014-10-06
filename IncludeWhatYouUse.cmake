@@ -93,10 +93,13 @@ function (iwyu_target_sources TARGET)
 
         endif (NOT CXX_INDEX EQUAL -1)
 
+        # Convert spaces in IWYU_SOURCE_ARGS to "," delimiter
+        string (REPLACE " " "," IWYU_SOURCE_ARGS "${IWYU_SOURCE_ARGS}")
+
         set (IWYU_ARGUMENTS
              ${IWYU_TARGET_ARGS}
              ${IWYU_SOURCE_ARGS})
-        string (REPLACE ";" " " IWYU_ARGUMENTS "${IWYU_ARGUMENTS}")
+        string (REPLACE ";" "," IWYU_ARGUMENTS "${IWYU_ARGUMENTS}")
 
         add_custom_command (TARGET ${TARGET}
                             ${WHEN}

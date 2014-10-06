@@ -28,6 +28,9 @@ endif (NOT IWYU_SOURCE)
 # Get rid of the quotes in IWYU_COMPILER_ARGS
 string (REPLACE "\"" "" IWYU_COMPILER_ARGS "${IWYU_COMPILER_ARGS}")
 
+# Convert from "," as a delimiter to ";"
+string (REPLACE "," ";" IWYU_COMPILER_ARGS "${IWYU_COMPILER_ARGS}")
+
 set (IWYU_COMMAND_LINE
      ${IWYU_EXECUTABLE}
      ${IWYU_COMPILER_ARGS}

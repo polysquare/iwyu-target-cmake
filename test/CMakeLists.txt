@@ -86,3 +86,5 @@ add_cmake_build_test (IWYUPassDefines
                       IWYUPassDefinesVerify)
 add_cmake_build_test (IWYUPassIncludes
                       IWYUPassIncludesVerify)
+add_cmake_build_test (IWYUArgumentsPassedCorrectly
+                      IWYUArgumentsPassedCorrectlyVerify)
