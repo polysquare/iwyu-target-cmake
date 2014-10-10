@@ -5,8 +5,8 @@
 #
 # See LICENCE.md for Copyright information
 
-include (${IWYU_CMAKE_TESTS_DIRECTORY}/CMakeUnit.cmake)
-include (${IWYU_CMAKE_DIRECTORY}/IncludeWhatYouUse.cmake)
+include (CMakeUnit)
+include (IncludeWhatYouUse)
 
 _validate_include_what_you_use (CONTINUE)
 

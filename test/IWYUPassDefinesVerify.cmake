@@ -4,7 +4,7 @@
 #
 # See LICENCE.md for Copyright information
 
-include (${IWYU_CMAKE_TESTS_DIRECTORY}/CMakeUnit.cmake)
+include (CMakeUnit)
 set (BUILD_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/BUILD.output)
 
 set (SOURCE_COMMAND "^.*include-what-you-use.*-DMY_DEFINE=1.*Source.cpp.*$")
