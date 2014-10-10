@@ -9,21 +9,17 @@ include (${CMAKE_CURRENT_LIST_DIR}/tooling-cmake-util/PolysquareToolingUtil.cmak
 set (IWYU_EXIT_STATUS_WRAPPER
      ${CMAKE_CURRENT_LIST_DIR}/util/IWYUExitStatusWrapper.cmake)
 
-function (_validate_include_what_you_use CONTINUE)
+macro (_validate_include_what_you_use CONTINUE)
 
-  find_program (IWYU_EXECUTABLE include-what-you-use)
+    if (NOT DEFINED IncludeWhatYouUse_FOUND)
 
-  if (NOT IWYU_EXECUTABLE)
+        find_package (IncludeWhatYouUse ${ARGN})
 
-    set (${CONTINUE} FALSE PARENT_SCOPE)
-    return ()
+    endif (NOT DEFINED IncludeWhatYouUse_FOUND)
 
-  endif (NOT IWYU_EXECUTABLE)
+    set (${CONTINUE} ${IncludeWhatYouUse_FOUND})
 
-  set (${CONTINUE} TRUE PARENT_SCOPE)
-  set (IWYU_EXECUTABLE ${IWYU_EXECUTABLE} PARENT_SCOPE)
-
-endfunction ()
+endmacro ()
 
 function (iwyu_target_sources TARGET)
 
