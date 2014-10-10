@@ -21,12 +21,6 @@ set (CMAKE_UNIT_DIRECTORY
      ${IWYU_CMAKE_DIRECTORY}/cmake-unit)
 
 set (IWYU_INITIAL_CACHE_CONTENTS
-     "set (IWYU_CMAKE_DIRECTORY\n"
-     "     ${IWYU_CMAKE_DIRECTORY}\n"
-     "     CACHE STRING \"\" FORCE)\n"
-     "set (IWYU_CMAKE_TESTS_DIRECTORY\n"
-     "     ${CMAKE_UNIT_DIRECTORY}\n"
-     "     CACHE STRING \"\" FORCE)\n"
      "set (CMAKE_C_COMPILER\n"
      "     ${CMAKE_C_COMPILER}\n"
      "     CACHE STRING \"\" FORCE)\n"
@@ -38,6 +32,13 @@ set (CMAKE_MODULE_PATH
      ${CMAKE_UNIT_DIRECTORY}
      ${IWYU_CMAKE_DIRECTORY}
      ${CMAKE_MODULE_PATH})
+
+foreach (PATH ${CMAKE_MODULE_PATH})
+     set (IWYU_INITIAL_CACHE_CONTENTS
+          "${IWYU_INITIAL_CACHE_CONTENTS}\n"
+          "set (CMAKE_MODULE_PATH ${PATH} \${CMAKE_MODULE_PATH}\n"
+          "     CACHE STRING \"\" FORCE)\n")
+endforeach ()
 
 # Include IncludeWhatYouUse.cmake too so that we can figure out which tests we can run
 include (IncludeWhatYouUse)
@@ -53,12 +54,6 @@ include (CMakeUnitRunner)
 
 bootstrap_cmake_unit (INITIAL_CACHE_CONTENTS
                       IWYU_INITIAL_CACHE_CONTENTS)
-
-# The ninja generator does dependency scanning at the start of the build
-# so we can't fool it into skipping this dependency by generating the
-# stampfile during the build.
-if (NOT CMAKE_GENERATOR STREQUAL "Ninja")
-endif (NOT CMAKE_GENERATOR STREQUAL "Ninja")
 
 add_cmake_build_test (IWYUTargetSources
                       IWYUTargetSourcesVerify)

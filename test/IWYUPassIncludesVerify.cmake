@@ -4,7 +4,7 @@
 #
 # See LICENCE.md for Copyright information
 
-include (${IWYU_CMAKE_TESTS_DIRECTORY}/CMakeUnit.cmake)
+include (CMakeUnit)
 set (BUILD_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/BUILD.output)
 
 set (HEADERS_REGEX ".*-isystem.*external.*-I.*internal.*")
