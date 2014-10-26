@@ -20,7 +20,11 @@
 #
 # See LICENCE.md for Copyright info
 
-include (${CMAKE_CURRENT_LIST_DIR}/tooling-find-package-cmake-util/ToolingFindPackageUtil.cmake)
+set (CMAKE_MODULE_PATH
+     ${CMAKE_MODULE_PATH}
+     ${CMAKE_CURRENT_LIST_DIR}/tooling-find-package-cmake-util)
+
+include (ToolingFindPackageUtil)
 
 function (_find_iwyu)
 
@@ -53,40 +57,23 @@ function (_find_iwyu)
                                        VERSION_HEADER
                                        "${IWYU_VERSION_HEADER}"
                                        VERSION_END_TOKEN " ")
-        psq_check_and_report_tool_version (IncludeWhatYouUse
-                                           ${IWYU_VERSION}
-                                           FOUND_APPROPRIATE_VERSION)
-
-        # If we found all the paths set IncludeWhatYouUse_FOUND and other
-        # related variables
-        if (FOUND_APPROPRIATE_VERSION)
-
-            set (IncludeWhatYouUse_FOUND TRUE)
-            set (IWYU_FOUND TRUE PARENT_SCOPE)
-            set (IWYU_EXECUTABLE ${IWYU_EXECUTABLE} PARENT_SCOPE)
-            set (IWYU_VERSION ${IWYU_VERSION} PARENT_SCOPE)
-
-            psq_print_if_not_quiet (IncludeWhatYouUse
-                                    "IncludeWhatYouUse version"
-                                    "${IWYU_VERSION} found at"
-                                    "${IWYU_EXECUTABLE}")
-
-        else (FOUND_APPROPRIATE_VERSION)
-
-            set (IncludeWhatYouUse_FOUND FALSE)
-
-        endif (FOUND_APPROPRIATE_VERSION)
 
     endif (IWYU_EXECUTABLE)
 
+    psq_check_and_report_tool_version (IncludeWhatYouUse
+                                       "${IWYU_VERSION}"
+                                       REQUIRED_VARS
+                                       IWYU_EXECUTABLE
+                                       IWYU_VERSION)
+
+    psq_print_if_not_quiet (IncludeWhatYouUse
+                            MSG "IncludeWhatYouUse version"
+                                "${IWYU_VERSION} found at"
+                                "${IWYU_EXECUTABLE}"
+                            DEPENDS IWYU_VERSION
+                                    IWYU_EXECUTABLE)
+
     set (IncludeWhatYouUse_FOUND ${IncludeWhatYouUse_FOUND} PARENT_SCOPE)
-
-    if (NOT IncludeWhatYouUse_FOUND)
-
-        psq_report_tool_not_found (IncludeWhatYouUse
-                                   "IncludeWhatYouUse was not found")
-
-    endif (NOT IncludeWhatYouUse_FOUND)
 
 endfunction (_find_iwyu)
 
