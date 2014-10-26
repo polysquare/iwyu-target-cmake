@@ -66,13 +66,6 @@ function (_find_iwyu)
                                        IWYU_EXECUTABLE
                                        IWYU_VERSION)
 
-    psq_print_if_not_quiet (IncludeWhatYouUse
-                            MSG "IncludeWhatYouUse version"
-                                "${IWYU_VERSION} found at"
-                                "${IWYU_EXECUTABLE}"
-                            DEPENDS IWYU_VERSION
-                                    IWYU_EXECUTABLE)
-
     set (IncludeWhatYouUse_FOUND ${IncludeWhatYouUse_FOUND} PARENT_SCOPE)
 
 endfunction (_find_iwyu)
