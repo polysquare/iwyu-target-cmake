@@ -37,7 +37,7 @@ function (iwyu_target_sources TARGET)
                            "${IWYU_SOURCES_MULTIVAR_ARGS}"
                            ${ARGN})
 
-    psq_strip_add_custom_target_sources (FILES_TO_CHECK ${TARGET})
+    psq_strip_extraneous_sources (FILES_TO_CHECK ${TARGET})
     psq_handle_check_generated_option (IWYU_SOURCES FILES_TO_CHECK
                                        SOURCES ${FILES_TO_CHECK})
 
@@ -79,10 +79,12 @@ function (iwyu_target_sources TARGET)
 
             set (IWYU_SOURCE_ARGS
                  "${CMAKE_CXX_FLAGS} -x c++")
+            set (LANGUAGE_STAMP_OPTION "cxx")
 
         else (NOT CXX_INDEX EQUAL -1)
 
             set (IWYU_SOURCE_ARGS "${CMAKE_C_FLAGS}")
+            set (LANGUAGE_STAMP_OPTION "c")
 
         endif (NOT CXX_INDEX EQUAL -1)
 
@@ -94,16 +96,17 @@ function (iwyu_target_sources TARGET)
              ${IWYU_SOURCE_ARGS})
         string (REPLACE ";" "," IWYU_ARGUMENTS "${IWYU_ARGUMENTS}")
 
-        add_custom_command (TARGET ${TARGET}
-                            ${WHEN}
-                            COMMAND
-                            ${CMAKE_COMMAND}
-                            -DIWYU_SOURCE=${SOURCE}
-                            -DIWYU_COMPILER_ARGS="${IWYU_ARGUMENTS}"
-                            ${IWYU_WRAPPER_OPTIONS}
-                            -P
-                            ${IWYU_EXIT_STATUS_WRAPPER}
-                            VERBATIM)
+        psq_run_tool_on_source (${TARGET}
+                                ${SOURCE}
+                                "include-what-you-use.${LANGUAGE_STAMP_OPTION}"
+                                COMMAND
+                                ${CMAKE_COMMAND}
+                                -DIWYU_SOURCE=${SOURCE}
+                                -DIWYU_COMPILER_ARGS="${IWYU_ARGUMENTS}"
+                                ${IWYU_WRAPPER_OPTIONS}
+                                -P
+                                ${IWYU_EXIT_STATUS_WRAPPER}
+                                VERBATIM)
 
     endforeach (SOURCE ${FILES_TO_CHECK})
 
