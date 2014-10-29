@@ -29,7 +29,8 @@ function (iwyu_target_sources TARGET)
          EXTERNAL_INCLUDE_DIRS
          INTERNAL_INCLUDE_DIRS
          DEFINES
-         CPP_IDENTIFIERS)
+         CPP_IDENTIFIERS
+         DEPENDS)
 
     cmake_parse_arguments (IWYU_SOURCES
                            "${IWYU_SOURCES_OPTION_ARGS}"
@@ -96,9 +97,12 @@ function (iwyu_target_sources TARGET)
              ${IWYU_SOURCE_ARGS})
         string (REPLACE ";" "," IWYU_ARGUMENTS "${IWYU_ARGUMENTS}")
 
+        psq_forward_options (IWYU_SOURCES RUN_TOOL_ON_SOURCE_FORWARD
+                             MULTIVAR_ARGS DEPENDS)
         psq_run_tool_on_source (${TARGET}
                                 ${SOURCE}
                                 "include-what-you-use.${LANGUAGE_STAMP_OPTION}"
+                                ${RUN_TOOL_ON_SOURCE_FORWARD}
                                 COMMAND
                                 ${CMAKE_COMMAND}
                                 -DIWYU_SOURCE=${SOURCE}
