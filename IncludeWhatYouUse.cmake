@@ -80,12 +80,12 @@ function (iwyu_target_sources TARGET)
 
             set (IWYU_SOURCE_ARGS
                  "${CMAKE_CXX_FLAGS} -x c++")
-            set (LANGUAGE_STAMP_OPTION "cxx")
+            set (LANGUAGE_STAMP_OPT "cxx")
 
         else (NOT CXX_INDEX EQUAL -1)
 
             set (IWYU_SOURCE_ARGS "${CMAKE_C_FLAGS}")
-            set (LANGUAGE_STAMP_OPTION "c")
+            set (LANGUAGE_STAMP_OPT "c")
 
         endif (NOT CXX_INDEX EQUAL -1)
 
@@ -101,7 +101,7 @@ function (iwyu_target_sources TARGET)
                              MULTIVAR_ARGS DEPENDS)
         psq_run_tool_on_source (${TARGET}
                                 ${SOURCE}
-                                "include-what-you-use.${LANGUAGE_STAMP_OPTION}"
+                                "include-what-you-use (${LANGUAGE_STAMP_OPT})"
                                 ${RUN_TOOL_ON_SOURCE_FORWARD}
                                 COMMAND
                                 ${CMAKE_COMMAND}
