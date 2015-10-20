@@ -1,4 +1,4 @@
-# FindIncludeWhatYouUse.cmake
+# /FindIWYU.cmake
 #
 # This CMake script will search for include-what-you-use and set the following
 # variables
@@ -16,17 +16,13 @@
 #                           the prefix to which include-what-you-use was
 #                           installed, and not the path that contains the
 #                           include-what-you-use binary.
-#                           E.g. /opt/ not /opt/bin/
+#                           Eg /opt/ not /opt/bin/
 #
-# See LICENCE.md for Copyright info
+# See /LICENCE.md for Copyright information
 
-set (CMAKE_MODULE_PATH
-     ${CMAKE_MODULE_PATH}
-     ${CMAKE_CURRENT_LIST_DIR}/tooling-find-package-cmake-util)
+include ("smspillaz/tooling-find-pkg-util/ToolingFindPackageUtil")
 
-include (ToolingFindPackageUtil)
-
-function (_find_iwyu)
+function (iwyu_find)
 
     # Set-up the directory tree of the include-what-you-use installation
     set (BIN_SUBDIR bin)
@@ -37,7 +33,7 @@ function (_find_iwyu)
                               PATHS ${IWYU_SEARCH_PATHS}
                               PATH_SUFFIXES "${BIN_SUBDIR}")
 
-    psq_report_not_found_if_not_quiet (IncludeWhatYouUse IWYU_EXECUTABLE
+    psq_report_not_found_if_not_quiet (IWYU IWYU_EXECUTABLE
                                        "The 'include-what-you-use' executable"
                                        "was not found in any search or system"
                                        "paths.\n..Please adjust"
@@ -51,23 +47,23 @@ function (_find_iwyu)
         set (IWYU_VERSION_HEADER
              "clang version ")
 
-        psq_find_tool_extract_version (${IWYU_EXECUTABLE}
+        psq_find_tool_extract_version ("${IWYU_EXECUTABLE}"
                                        IWYU_VERSION
                                        VERSION_ARG --version
                                        VERSION_HEADER
                                        "${IWYU_VERSION_HEADER}"
                                        VERSION_END_TOKEN " ")
 
-    endif (IWYU_EXECUTABLE)
+    endif ()
 
-    psq_check_and_report_tool_version (IncludeWhatYouUse
+    psq_check_and_report_tool_version (IWYU
                                        "${IWYU_VERSION}"
                                        REQUIRED_VARS
                                        IWYU_EXECUTABLE
                                        IWYU_VERSION)
 
-    set (IncludeWhatYouUse_FOUND ${IncludeWhatYouUse_FOUND} PARENT_SCOPE)
+    set (IWYU_FOUND ${IWYU_FOUND} PARENT_SCOPE)
 
-endfunction (_find_iwyu)
+endfunction ()
 
-_find_iwyu ()
+iwyu_find ()

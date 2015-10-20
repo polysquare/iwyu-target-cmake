@@ -1,4 +1,2 @@
-cmake
-ninja-build
 clang-3.6
 libstdc++6-4.6-dev
