@@ -1,9 +1,10 @@
 # /util/IWYUExitStatusWrapper.cmake
+#
 # Wraps execution of include-what-you-use, exiting with 1
 # if there are warnings or errors or 0 if include-what-you-use
 # exits with the message "has correct #includes/fwd-decls"
 #
-# See LICENCE.md for Copyright information
+# See /LICENCE.md for Copyright information
 
 set (IWYU_EXECUTABLE "" CACHE FORCE "")
 set (IWYU_SOURCE "" CACHE FORCE "")
@@ -16,14 +17,14 @@ if (NOT IWYU_EXECUTABLE)
     message (FATAL_ERROR "include-what-you-use binary not specified. "
                          "This is a bug in IncludeWhatYouUse.cmake")
 
-endif (NOT IWYU_EXECUTABLE)
+endif ()
 
 if (NOT IWYU_SOURCE)
 
     message (FATAL_ERROR "IWYU_SOURCE not specified. "
                          "This is a bug in IncludeWhatYouUse.cmake")
 
-endif (NOT IWYU_SOURCE)
+endif ()
 
 # Get rid of the quotes in IWYU_COMPILER_ARGS
 string (REPLACE "\"" "" IWYU_COMPILER_ARGS "${IWYU_COMPILER_ARGS}")
@@ -32,14 +33,14 @@ string (REPLACE "\"" "" IWYU_COMPILER_ARGS "${IWYU_COMPILER_ARGS}")
 string (REPLACE "," ";" IWYU_COMPILER_ARGS "${IWYU_COMPILER_ARGS}")
 
 set (IWYU_COMMAND_LINE
-     ${IWYU_EXECUTABLE}
+     "${IWYU_EXECUTABLE}"
      ${IWYU_COMPILER_ARGS}
-     ${IWYU_SOURCE})
+     "${IWYU_SOURCE}")
 
 if (VERBOSE)
     string (REPLACE ";" " " IWYU_PRINTED_COMMAND_LINE "${IWYU_COMMAND_LINE}")
     message (STATUS ${IWYU_PRINTED_COMMAND_LINE})
-endif (VERBOSE)
+endif ()
 
 execute_process (COMMAND
                  ${IWYU_COMMAND_LINE}
@@ -57,7 +58,7 @@ foreach (LINE ${ERROR_LINES})
 
         set (SUCCESS TRUE)
 
-    endif ("${LINE}" MATCHES "^.*has correct #includes/fwd-decls.*$")
+    endif ()
 
 endforeach ()
 
@@ -69,6 +70,6 @@ if (NOT SUCCESS)
     if (NOT WARN_ONLY)
         message (FATAL_ERROR
                  "include-what-you-use found problems with ${IWYU_SOURCE}")
-    endif (NOT WARN_ONLY)
+    endif ()
 
-endif (NOT SUCCESS)
+endif ()
