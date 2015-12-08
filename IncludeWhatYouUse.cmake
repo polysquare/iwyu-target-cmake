@@ -9,11 +9,15 @@ include ("smspillaz/tooling-cmake-util/PolysquareToolingUtil")
 
 set (IWYU_EXIT_STATUS_WRAPPER
      "${CMAKE_CURRENT_LIST_DIR}/util/IWYUExitStatusWrapper.cmake")
+set (_IWYU_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 
 macro (iwyu_validate CONTINUE)
 
     if (NOT DEFINED IWYU_FOUND)
 
+        set (CMAKE_MODULE_PATH
+             ${CMAKE_MODULE_PATH} # NOLINT:correctness/quotes
+             "${_IWYU_LIST_DIR}")
         find_package (IWYU ${ARGN})
 
     endif ()
