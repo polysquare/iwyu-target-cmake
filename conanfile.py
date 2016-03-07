@@ -26,6 +26,10 @@ class IWYUCTargetCmakeConan(ConanFile):
         os.unlink(zip_name)
 
     def package(self):
+        self.copy(pattern="Find*.cmake",
+                  dst="",
+                  src="iwyu-target-cmake-" + VERSION,
+                  keep_path=True)
         self.copy(pattern="*.cmake",
                   dst="cmake/iwyu-target-cmake",
                   src="iwyu-target-cmake-" + VERSION,
