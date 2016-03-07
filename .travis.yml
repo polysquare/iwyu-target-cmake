@@ -4,30 +4,44 @@ cache:
   directories:
   - container
 env:
-- CMAKE_GENERATOR="Unix Makefiles" CMAKE_VERSION="latest" DEPLOY="1"
-- CMAKE_GENERATOR="Ninja" CMAKE_VERSION="latest"
-- CMAKE_GENERATOR="Unix Makefiles" CMAKE_VERSION="3.0"
-- CMAKE_GENERATOR="Ninja" CMAKE_VERSION="3.0"
-- CMAKE_GENERATOR="Unix Makefiles" CMAKE_VERSION="latest" COVERAGE="--use-cmake-coverage"
+  matrix:
+  - CMAKE_GENERATOR="Unix Makefiles" CMAKE_VERSION="latest" DEPLOY="1"
+  - CMAKE_GENERATOR="Ninja" CMAKE_VERSION="latest"
+  - CMAKE_GENERATOR="Unix Makefiles" CMAKE_VERSION="3.0"
+  - CMAKE_GENERATOR="Ninja" CMAKE_VERSION="3.0"
+  - CMAKE_GENERATOR="Unix Makefiles" CMAKE_VERSION="latest" COVERAGE="--use-cmake-coverage"
+  global:
+  - secure: oZ5YCiwM33OLsjnCLOuMt6Nw1NRihtgfhEwvbZA5/lFbx0fPzh2DJAAj8w0sM8NIodzNa2bJmAgDUi8vmZQ+CsV3wbGMWnNEZYWS6J713xs9kq9Hp5WEB1+SFi34oHkRtS46wirCcN13gu1a3NHowiTbTMVsxSPvxcq9y4QN3IQ=
+  - secure: b7MMNAcT4sL2KYVhokJxBsZxTZ/THA80bmCNc5Qh7b9TLas61uaUxWPgQf59NuSmk5kvAj6CNUo8BGC40owvMi41MZSRKD3bBO0CqtBMrD9fittbH10QLRnD/zmXKlWbajJlGLdtz7OGRLfEg0Qt1s816EQHe1JbpNPRCp5ycmU=
+  - secure: pvV7ZmjpdT0VgosMvOlkJUw3k/m1abiIDV/8OA18H18RwEXx6Fy7fVJB8LxDcOw6oGNKUDqWskR9UjekyRT91Nwyze/eGjUmn1IqqxWbAf7Rp+c4vd/wOpyM2wpqU0LGllUWtlSooFjHxQC3B/ySF88zzYY9VT+KHAKv6jFGb6A=
+addons:
+  apt:
+    sources:
+    - deadsnakes
+    packages:
+    - python3.4-dev
 install:
-- eval $(curl -LSs --retry 100 --connect-timeout 3 public-travis-scripts.polysquare.org/bootstrap.py | python /dev/stdin -d container -s setup/bii/setup.py -e bash -p /dev/stdout --cmake-version ${CMAKE_VERSION})
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] ; then wget http://launchpadlibrarian.net/162564634/iwyu_3.3-4_amd64.deb; container/_languages/python/3.4.1/bin/psq-travis-container-exec container/_languages/os/Ubuntu.precise.None --distro "Ubuntu" --release "precise" --show-output -- dpkg -i --force-depends iwyu_3.3-4_amd64.deb; fi
+- eval $(curl -LSs --retry 100 --connect-timeout 3 public-travis-scripts.polysquare.org/bootstrap.py
+  | python /dev/stdin -d container -s setup/conan/setup.py -e bash -p /dev/stdout
+  --cmake-version ${CMAKE_VERSION})
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] ; then wget http://launchpadlibrarian.net/162564634/iwyu_3.3-4_amd64.deb;
+  container/_languages/python/3.4.1/bin/psq-travis-container-exec container/_languages/os/Ubuntu.precise.None
+  --distro "Ubuntu" --release "precise" --show-output -- dpkg -i --force-depends iwyu_3.3-4_amd64.deb;
+  fi
 script:
-- polysquare_run check/bii/check.py ${COVERAGE} --cmake-namespace "iwyu" --generator "${CMAKE_GENERATOR}" --block "smspillaz/iwyu-target-cmake"
+- polysquare_run check/conan/check.py ${COVERAGE} --cmake-namespace "iwyu" --generator
+  "${CMAKE_GENERATOR}"
 before_cache:
 - polysquare_cleanup
 after_success:
-- polysquare_run coverage/bii/coverage.py
+- polysquare_run coverage/conan/coverage.py
 before_deploy:
-- polysquare_run deploy/bii/deploy.py
+- polysquare_run deploy/conan/before_deploy.py --package="iwyu-target-cmake"
 deploy:
-  provider: biicode
+  provider: script
   skip_cleanup: true
-  user:
-    secure: Qmev4jnZQ/h+yR5MwFCaCHO2tGe9+ah8k55hva7vfUbAcGDdwVPB3dq+NdwmQcLs/YXI1HKTw9uBvY/5uKQXB92B+r0blaBJCvGeNrFlJCV7eJ8zjD5ublcaOAvLNJmNCk7tO2gTGW+tOO+9XGrYSSoDh0v5mUpkPmIkxs4bQnE=
-  password:
-    secure: BrVk9kQ/VyWlCtGU0FFXELv7kqVHWYblcoQ6tbFBvakKNLyi1Ea1L/+MM/mYbLKd8+JWzHsB5b98C2ve2740P6I8M7SfuaVnL9f0HckIL4Y8c4nD1QMbGDUlqxhb1k63rjNovKcOPSA4w19moD50AYyXHQSllECEgLn99NXNqS8=
+  script: "./travis-deploy"
   on:
     repo: polysquare/iwyu-target-cmake
     branch: master
-    condition: ${DEPLOY} = 1
+    condition: "${DEPLOY} = 1"
