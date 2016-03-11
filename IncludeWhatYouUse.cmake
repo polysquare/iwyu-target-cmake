@@ -99,8 +99,12 @@ function (iwyu_target_sources TARGET)
         # Convert spaces in IWYU_SOURCE_ARGS to "," delimiter
         string (REPLACE " " "," IWYU_SOURCE_ARGS "${IWYU_SOURCE_ARGS}")
 
+        get_property (TARGET_PROPERTY_COMPILE_FLAGS
+                      TARGET "${TARGET}" PROPERTY COMPILE_FLAGS)
+
         set (IWYU_ARGUMENTS
              ${IWYU_TARGET_ARGS}
+             ${TARGET_PROPERTY_COMPILE_FLAGS}
              ${IWYU_SOURCE_ARGS})
         string (REPLACE ";" "," IWYU_ARGUMENTS "${IWYU_ARGUMENTS}")
 
