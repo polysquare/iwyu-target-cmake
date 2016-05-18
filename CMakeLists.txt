@@ -735,7 +735,7 @@ set (CMAKE_FILES
      "${_UTIL_DIR}/IWYUExitStatusWrapper.cmake"
      "${_CURRENT_LIST_DIR}/CMakeLists.txt")
 set (MARKDOWN_FILES
-     "${_CURRENT_LIST_DIR}/LICENSE.md"
+     "${_CURRENT_LIST_DIR}/LICENCE.md"
      "${_CURRENT_LIST_DIR}/README.md")
 
 cmake_module_add_common_targets (NAMESPACE "iwyu"
