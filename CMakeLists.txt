@@ -14,8 +14,7 @@ cmake_minimum_required (VERSION 2.8)
 
 set (_CURRENT_LIST_FILE "${CMAKE_CURRENT_LIST_FILE}")
 
-include ("cmake/cmake-unit/CMakeUnitRunner")
-include ("cmake/cmake-unit/CMakeUnit")
+include ("cmake/cmake-module-common/Common")
 
 include (IncludeWhatYouUse)
 
@@ -728,15 +727,17 @@ function (iwyu_test_not_available)
 
 endfunction ()
 
-if (BIICODE)
-
-    add_bii_targets ()
-
-endif ()
-
 set (_CURRENT_LIST_DIR "${CMAKE_CURRENT_LIST_DIR}")
 set (_UTIL_DIR "${_CURRENT_LIST_DIR}/util")
-cmake_unit_init (NAMESPACE iwyu
-                 COVERAGE_FILES "${_CURRENT_LIST_DIR}/IncludeWhatYouUse.cmake"
-                                "${_CURRENT_LIST_DIR}/FindIWYU.cmake"
-                                "${_UTIL_DIR}/IWYUExitStatusWrapper.cmake")
+set (CMAKE_FILES
+     "${_CURRENT_LIST_DIR}/IncludeWhatYouUse.cmake"
+     "${_CURRENT_LIST_DIR}/FindIWYU.cmake"
+     "${_UTIL_DIR}/IWYUExitStatusWrapper.cmake"
+     "${_CURRENT_LIST_DIR}/CMakeLists.txt")
+set (MARKDOWN_FILES
+     "${_CURRENT_LIST_DIR}/LICENSE.md"
+     "${_CURRENT_LIST_DIR}/README.md")
+
+cmake_module_add_common_targets (NAMESPACE "iwyu"
+                                 CMAKE_FILES ${CMAKE_FILES}
+                                 DOCUMENTATION_FILES ${MARKDOWN_FILES})
