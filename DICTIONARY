@@ -9,6 +9,7 @@ filename
 IncludeWhatYouUseTarget
 IWYU
 NOTFOUND
+POLYSQUARE
 polysquare
 preprocessing
 stderr
