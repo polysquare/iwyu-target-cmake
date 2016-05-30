@@ -2,7 +2,7 @@ from conans import ConanFile
 from conans.tools import download, unzip
 import os
 
-VERSION = "0.0.7"
+VERSION = "0.0.8"
 
 
 class IWYUCTargetCmakeConan(ConanFile):
