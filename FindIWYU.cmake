@@ -26,7 +26,22 @@ function (iwyu_find)
 
     # Set-up the directory tree of the include-what-you-use installation
     set (BIN_SUBDIR bin)
-    set (IWYU_EXECUTABLE_NAME include-what-you-use)
+    set (IWYU_EXECUTABLE_NAMES include-what-you-use iwyu)
+
+    foreach (IWYU_EXECUTABLE_NAME ${IWYU_EXECUTABLE_NAMES})
+
+        psq_find_tool_executable (${IWYU_EXECUTABLE_NAME}
+                                  IWYU_EXECUTABLE
+                                  PATHS ${IWYU_SEARCH_PATHS}
+                                  PATH_SUFFIXES "${BIN_SUBDIR}")
+
+        if (IWYU_EXECUTABLE)
+
+            break ()
+
+        endif ()
+
+    endforeach ()
 
     psq_find_tool_executable (${IWYU_EXECUTABLE_NAME}
                               IWYU_EXECUTABLE
