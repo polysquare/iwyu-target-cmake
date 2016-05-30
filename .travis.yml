@@ -32,10 +32,6 @@ install:
 - eval $(curl -LSs --retry 100 --connect-timeout 3 public-travis-scripts.polysquare.org/bootstrap.py
   | python /dev/stdin -d container -s setup/conan/setup.py -e bash -p /dev/stdout
   --cmake-version ${CMAKE_VERSION})
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]] ; then wget http://launchpadlibrarian.net/162564634/iwyu_3.3-4_amd64.deb;
-  container/_languages/python/3.4.4/bin/psq-travis-container-exec container/_languages/os/Ubuntu.precise.None
-  --distro "Ubuntu" --release "precise" --show-output -- dpkg -i --force-depends iwyu_3.3-4_amd64.deb;
-  fi
 script:
 - polysquare_run check/conan/check.py ${COVERAGE} --cmake-namespace "iwyu" --generator
   "${CMAKE_GENERATOR}"
